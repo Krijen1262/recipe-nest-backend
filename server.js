@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-// 🔹 ROUTES
+// ROUTES
 const authRoutes = require("./routes/authRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const chefRoutes = require("./routes/chefRoutes");
@@ -12,24 +12,24 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-// 🔥 MIDDLEWARE (IMPORTANT ORDER)
+// MIDDLEWARE (IMPORTANT ORDER)
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 🔥 ROUTES
+// ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/chefs", chefRoutes);
 app.use("/api/admin", adminRecipeRoutes);
 app.use("/api/user", userRoutes);
 
-// 🔹 ROOT TEST
+// ROOT TEST
 app.get("/", (req, res) => {
-  res.send("Recipe Nest API running 🚀");
+  res.send("Recipe Nest API running");
 });
 
-// 🔹 DB CONNECTION
+// DB CONNECTION
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
