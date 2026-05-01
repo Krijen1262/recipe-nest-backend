@@ -4,9 +4,6 @@ const { protect, allowRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-/**
- * PUBLIC: users see only approved + active recipes
- */
 router.get("/", async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
@@ -51,10 +48,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * CHEF: get own recipes
- * IMPORTANT: must be before /:id
- */
 router.get("/my-recipes", protect, allowRoles("chef"), async (req, res) => {
   try {
     const recipes = await Recipe.find({ chef: req.user._id }).sort({
@@ -67,10 +60,7 @@ router.get("/my-recipes", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * PUBLIC: get single recipe
- * IMPORTANT: keep after /my-recipes
- */
+
 router.get("/:id", async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id).populate(
@@ -88,9 +78,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/**
- * CHEF: create recipe
- */
 router.post("/", protect, allowRoles("chef"), async (req, res) => {
   try {
     const { title, cuisine, description, ingredients, steps, image } = req.body;
@@ -116,9 +103,7 @@ router.post("/", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * CHEF: update own recipe only
- */
+
 router.put("/:id", protect, allowRoles("chef"), async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
@@ -153,9 +138,6 @@ router.put("/:id", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * CHEF: delete own recipe only
- */
 router.delete("/:id", protect, allowRoles("chef"), async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
@@ -178,9 +160,6 @@ router.delete("/:id", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * USER: rate approved recipe
- */
 router.post("/:id/rate", protect, allowRoles("user"), async (req, res) => {
   try {
     const { rating } = req.body;

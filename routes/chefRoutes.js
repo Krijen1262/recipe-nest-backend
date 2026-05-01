@@ -5,10 +5,7 @@ const { protect, allowRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-/**
- * PUBLIC: Get all chefs with pagination
- * GET /api/chefs?page=1&limit=8
- */
+
 router.get("/", async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
@@ -37,15 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * IMPORTANT:
- * Put /profile/me BEFORE /:id
- * Otherwise Express treats "profile" as id.
- */
 
-/**
- * CHEF: Get logged-in chef profile
- */
 router.get("/profile/me", protect, allowRoles("chef"), async (req, res) => {
   try {
     const chef = await User.findById(req.user._id).select("-password");
@@ -56,9 +45,6 @@ router.get("/profile/me", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * CHEF: Update logged-in chef profile
- */
 router.put("/profile/me", protect, allowRoles("chef"), async (req, res) => {
   try {
     const { fullName, speciality, bio, profileImage, socialLinks } = req.body;
@@ -93,9 +79,6 @@ router.put("/profile/me", protect, allowRoles("chef"), async (req, res) => {
   }
 });
 
-/**
- * PUBLIC: Get single chef by id + approved active recipes
- */
 router.get("/:id", async (req, res) => {
   try {
     const chef = await User.findById(req.params.id).select("-password");
@@ -119,9 +102,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/**
- * USER: Rate a chef
- */
 router.post("/:id/rate", protect, allowRoles("user"), async (req, res) => {
   try {
     const { rating } = req.body;
